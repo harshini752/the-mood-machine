@@ -44,12 +44,16 @@ NEGATIVE_WORDS = [
 
 # Short example posts written as if they were social media updates or messages.
 SAMPLE_POSTS = [
-    "I love this class so much",
-    "Today was a terrible day",
-    "Feeling tired but kind of hopeful",
-    "This is fine",
-    "So excited for the weekend",
-    "I am not happy about this",
+    "Lowkey proud of how today went 🙂",
+    "I absolutely love when my WiFi cuts out 💀",
+    "W day no cap",
+    "not gonna lie this hit different 🥲",
+    "could be worse I guess",
+    "day was mid",
+    "ok that was actually kinda fun ngl",
+    "I'm fine :)",
+    "so done with everything rn 😭",
+    "honestly? not bad. not bad at all 👀",
 ]
 
 # Human labels for each post above.
@@ -59,18 +63,22 @@ SAMPLE_POSTS = [
 #   - "neutral"
 #   - "mixed"
 TRUE_LABELS = [
-    "positive",  # "I love this class so much"
-    "negative",  # "Today was a terrible day"
-    "mixed",     # "Feeling tired but kind of hopeful"
-    "neutral",   # "This is fine"
-    "positive",  # "So excited for the weekend"
-    "negative",  # "I am not happy about this"
+   "mixed",    # "Lowkey proud of how today went 🙂"
+    "sarcasm",  # "I absolutely love when my WiFi cuts out 💀"
+    "positive", # "W day no cap"
+    "mixed",    # "not gonna lie this hit different 🥲"
+    "neutral",  # "could be worse I guess"
+    "neutral",  # "day was mid"
+    "positive", # "ok that was actually kinda fun ngl"
+    "sarcasm",  # "I'm fine :)"
+    "negative", # "so done with everything rn 😭"
+    "positive", # "honestly? not bad. not bad at all 👀"
 ]
-
+assert len(SAMPLE_POSTS) == len(TRUE_LABELS), "Lists are misaligned!"
 # TODO: Add 5-10 more posts and labels.
 #
 # Requirements:
-#   - For every new post you add to SAMPLE_POSTS, you must add one
+#   - For every new post you add to SAMPLE_POSTeS, you must add one
 #     matching label to TRUE_LABELS.
 #   - SAMPLE_POSTS and TRUE_LABELS must always have the same length.
 #   - Include a variety of language styles, such as:
