@@ -21,7 +21,7 @@ def evaluate_rule_based(posts: List[str], labels: List[str]) -> float:
 
     print("=== Rule Based Evaluation on SAMPLE_POSTS ===")
     for text, true_label in zip(posts, labels):
-        predicted_label = analyzer.predict_label(text)
+        predicted_label = analyzer.analyze(text)
         is_correct = predicted_label == true_label
         if is_correct:
             correct += 1
@@ -51,7 +51,7 @@ def run_batch_demo() -> None:
     analyzer = MoodAnalyzer()
     print("\n=== Batch Demo on SAMPLE_POSTS (rule based) ===")
     for text in SAMPLE_POSTS:
-        label = analyzer.predict_label(text)
+        label = analyzer.analyze(text)
         # If explain() is implemented, show a short explanation.
         # reason = analyzer.explain(text)
         # print(f'"{text}" -> {label} ({reason})')
@@ -75,7 +75,7 @@ def run_interactive_loop() -> None:
             print("Goodbye from the Mood Machine.")
             break
 
-        label = analyzer.predict_label(user_input)
+        label = analyzer.analyze(user_input)
         # If explain() is implemented, you can include an explanation:
         # reason = analyzer.explain(user_input)
         # print(f"Model: {label} ({reason})")

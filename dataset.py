@@ -54,6 +54,16 @@ SAMPLE_POSTS = [
     "I'm fine :)",
     "so done with everything rn 😭",
     "honestly? not bad. not bad at all 👀",
+    "I literally can't stop smiling today",
+    "this is the worst day ever",
+    "I love waiting in long lines 🙄",
+    "feeling okay I guess",
+    "so tired but we finally did it!!",
+    "not bad at all",
+    "today was actually pretty good",
+    "ugh I hate Mondays",
+    "meh, nothing special",
+    "I'm so happy I could cry",
 ]
 
 # Human labels for each post above.
@@ -73,6 +83,16 @@ TRUE_LABELS = [
     "sarcasm",  # "I'm fine :)"
     "negative", # "so done with everything rn 😭"
     "positive", # "honestly? not bad. not bad at all 👀"
+    "positive",
+    "negative",
+    "sarcasm",
+    "neutral",
+    "mixed",
+    "positive",
+    "positive",
+    "negative",
+    "neutral",
+    "positive",
 ]
 assert len(SAMPLE_POSTS) == len(TRUE_LABELS), "Lists are misaligned!"
 # TODO: Add 5-10 more posts and labels.

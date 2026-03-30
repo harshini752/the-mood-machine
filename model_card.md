@@ -1,123 +1,122 @@
 # Model Card: Mood Machine
 
-This model card is for the Mood Machine project, which includes **two** versions of a mood classifier:
-
-1. A **rule based model** implemented in `mood_analyzer.py`
-2. A **machine learning model** implemented in `ml_experiments.py` using scikit learn
-
-You may complete this model card for whichever version you used, or compare both if you explored them.
-
 ## 1. Model Overview
+**Model type:**
+I used and compared both the rule-based model and the ML model.
 
-**Model type:**  
-Describe whether you used the rule based model, the ML model, or both.  
-Example: “I used the rule based model only” or “I compared both models.”
+**Intended purpose:**
+To classify short social media style text posts as positive, negative, 
+neutral, mixed, or sarcasm.
 
-**Intended purpose:**  
-What is this model trying to do?  
-Example: classify short text messages as moods like positive, negative, neutral, or mixed.
-
-**How it works (brief):**  
-For the rule based version, describe the scoring rules you created.  
-For the ML version, describe how training works at a high level (no math needed).
-
-
+**How it works (brief):**
+The rule-based model assigns a score to each post by checking words 
+against positive and negative word lists. It also handles negation 
+(e.g. "not bad" → positive). The ML model uses scikit-learn and learns 
+patterns automatically from labeled examples using bag of words.
 
 ## 2. Data
+**Dataset description:**
+The dataset contains 20 posts in SAMPLE_POSTS. The original dataset had 
+10 posts and I added 10 new ones including slang, emojis, and sarcasm.
 
-**Dataset description:**  
-Summarize how many posts are in `SAMPLE_POSTS` and how you added new ones.
+**Labeling process:**
+Labels were chosen based on the overall tone of each post. Some posts 
+were hard to label — for example "so tired but we finally did it!!" 
+could be positive or mixed depending on interpretation.
 
-**Labeling process:**  
-Explain how you chose labels for your new examples.  
-Mention any posts that were hard to label or could have multiple valid labels.
+**Important characteristics of your dataset:**
+- Contains slang ("W day no cap", "this slaps")
+- Includes sarcasm ("I love waiting in long lines 🙄")
+- Some posts express mixed feelings ("so tired but we finally did it!!")
+- Contains emojis (😭, 🥲, 💀)
+- Short and ambiguous messages ("meh, nothing special")
 
-**Important characteristics of your dataset:**  
-Examples you might include:  
+**Possible issues with the dataset:**
+The dataset is very small (20 posts). Some labels like "sarcasm" only 
+appear a few times, making it imbalanced. The language is mostly 
+informal English which may not represent all users.
 
-- Contains slang or emojis  
-- Includes sarcasm  
-- Some posts express mixed feelings  
-- Contains short or ambiguous messages
+## 3. How the Rule Based Model Works
+**Your scoring rules:**
+- Positive words (love, great, happy, proud, fun) add +1 to score
+- Negative words (hate, bad, awful, annoyed, sad) subtract -1 from score
+- Negation words (not, never, don't) flip the next word's score
+- Score >= 2 → positive, Score <= -2 → negative
+- Score == 0 → neutral, anything else → mixed
 
-**Possible issues with the dataset:**  
-Think about imbalance, ambiguity, or missing kinds of language.
+**Strengths of this approach:**
+- Easy to understand and explain every decision
+- Works well for simple, clear sentences like "ugh I hate Mondays"
+- Negation handling helps with phrases like "not bad"
 
-## 3. How the Rule Based Model Works (if used)
+**Weaknesses of this approach:**
+- Cannot detect sarcasm ("I love being stuck in traffic" → mixed, 
+  should be sarcasm)
+- Does not understand slang ("that movie was sick" → neutral, 
+  should be positive)
+- Emojis are mostly ignored
+- Only 30% accuracy on our dataset
 
-**Your scoring rules:**  
-Describe the modeling choices you made.  
-Examples:  
+## 4. How the ML Model Works
+**Features used:**
+Bag of words using CountVectorizer, which converts each post into 
+word frequency counts.
 
-- How positive and negative words affect score  
-- Negation rules you added  
-- Weighted words  
-- Emoji handling  
-- Threshold decisions for labels
+**Training data:**
+The model trained on SAMPLE_POSTS and TRUE_LABELS from dataset.py.
 
-**Strengths of this approach:**  
-Where does it behave predictably or reasonably well?
+**Training behavior:**
+Accuracy improved as more labeled examples were added. However the 
+model shows 100% accuracy because it is tested on the same data it 
+trained on, which means it likely memorized the answers rather than 
+truly learning patterns.
 
-**Weaknesses of this approach:**  
-Where does it fail?  
-Examples: sarcasm, subtlety, mixed moods, unfamiliar slang.
-
-## 4. How the ML Model Works (if used)
-
-**Features used:**  
-Describe the representation.  
-Example: “Bag of words using CountVectorizer.”
-
-**Training data:**  
-State that the model trained on `SAMPLE_POSTS` and `TRUE_LABELS`.
-
-**Training behavior:**  
-Did you observe changes in accuracy when you added more examples or changed labels?
-
-**Strengths and weaknesses:**  
-Strengths might include learning patterns automatically.  
-Weaknesses might include overfitting to the training data or picking up spurious cues.
+**Strengths and weaknesses:**
+Strengths: learns patterns automatically, handles sarcasm and slang 
+better than rule-based. Weaknesses: overfits to training data, would 
+likely fail on new unseen posts it has never seen before.
 
 ## 5. Evaluation
+**How you evaluated the model:**
+Both models were evaluated on the 20 labeled posts in dataset.py 
+using accuracy score.
 
-**How you evaluated the model:**  
-Both versions can be evaluated on the labeled posts in `dataset.py`.  
-Describe what accuracy you observed.
+**Examples of correct predictions:**
+- "ugh I hate Mondays" → negative ✅ (contains clear negative words)
+- "could be worse I guess" → neutral ✅ (no strong positive or negative signal)
+- "meh, nothing special" → neutral ✅ (flat, unenthusiastic tone)
 
-**Examples of correct predictions:**  
-Provide 2 or 3 examples and explain why they were correct.
-
-**Examples of incorrect predictions:**  
-Provide 2 or 3 examples and explain why the model made a mistake.  
-If you used both models, show how their failures differed.
+**Examples of incorrect predictions:**
+- "that movie was sick" → rule-based predicted neutral ❌ 
+  because "sick" is not in the positive word list
+- "I'm fine :)" → rule-based predicted neutral ❌ 
+  because it cannot detect sarcasm from punctuation
+- "W day no cap" → rule-based predicted neutral ❌ 
+  because it doesn't understand Gen Z slang
 
 ## 6. Limitations
-
-Describe the most important limitations.  
-Examples:  
-
-- The dataset is small  
-- The model does not generalize to longer posts  
-- It cannot detect sarcasm reliably  
-- It depends heavily on the words you chose or labeled
+- Dataset is very small (20 posts), not enough to generalize well
+- Rule-based model cannot detect sarcasm at all
+- ML model overfits — 100% on training data but would likely fail 
+  on new posts
+- Slang and emojis are mostly not handled by the rule-based model
+- Dataset is mostly informal English and may misinterpret other 
+  dialects or languages
 
 ## 7. Ethical Considerations
-
-Discuss any potential impacts of using mood detection in real applications.  
-Examples: 
-
-- Misclassifying a message expressing distress  
-- Misinterpreting mood for certain language communities  
-- Privacy considerations if analyzing personal messages
+- A mood classifier that misreads distress as neutral could fail 
+  someone who needs help
+- Sarcasm misclassification could lead to wrong conclusions about 
+  how someone is feeling
+- The dataset is biased toward Gen Z English slang, so it may 
+  misinterpret posts from other age groups or cultures
+- Using mood detection on personal messages raises serious privacy 
+  concerns
 
 ## 8. Ideas for Improvement
-
-List ways to improve either model.  
-Possible directions:  
-
-- Add more labeled data  
-- Use TF IDF instead of CountVectorizer  
-- Add better preprocessing for emojis or slang  
-- Use a small neural network or transformer model  
-- Improve the rule based scoring method  
-- Add a real test set instead of training accuracy only
+- Add more labeled data (at least 100+ posts)
+- Add an emoji dictionary to score emojis as positive or negative
+- Add a sarcasm detection rule using context clues
+- Use TF-IDF instead of CountVectorizer for better word weighting
+- Create a separate test set to get a real accuracy score
+- Add slang to the positive/negative word lists
